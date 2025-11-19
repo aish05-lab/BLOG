@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Animated Blog – RSHash Function</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f8ff;
+            padding: 20px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2 {
+            color: #003366;
+            animation: fadeSlide 1.5s ease forwards;
+            opacity: 0;
+        }
+
+        p, pre {
+            animation: fadeSlide 2s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeSlide {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        #animationBox {
+            margin-top: 30px;
+            padding: 15px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            font-size: 18px;
+        }
+
+        #result {
+            font-weight: bold;
+            color: #006600;
+        }
+
+        .charBox {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 4px;
+            background: #cce5ff;
+            border-radius: 5px;
+            animation: pop 0.4s ease;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.3); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #003366;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0055aa;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<h1>Study of Hash Function - RSHash</h1>
+
+<h2> What is RSHash?</h2>
+<p>
+RSHash is a simple and fast hashing function developed by Robert Sedgwick.  
+It uses two magic numbers (<b>63689</b> and <b>378551</b>) to generate a unique integer for any string.
+</p>
+
+<h2> How RSHash Works</h2>
+<p>The procedure is:</p>
+<ul>
+    <li>Start hash = 0</li>
+    <li>For each character → hash = hash * a + ASCII value</li>
+    <li>After each character → a = a * b</li>
+</ul>
+
+<h2> Python Code</h2>
+<pre>
+def RSHash(string):
+    a = 63689
+    b = 378551
+    hash_value = 0
+    
+    for ch in string:
+        hash_value = hash_value * a + ord(ch)
+        a = a * b
+        
+    return hash_value
+</pre>
+
+<h2> RSHash Animation</h2>
+<div id="animationBox">
+    <p>Enter text to see how RSHash processes each character:</p>
+    <input type="text" id="inputString" placeholder="Type something..." style="padding: 8px; width: 70%;">
+    <button onclick="startAnimation()">Animate RSHash</button>
+
+    <div id="animationArea" style="margin-top: 20px;"></div>
+    <p id="result"></p>
+</div>
+
+<script>
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function startAnimation() {
+    let text = document.getElementById("inputString").value;
+    let area = document.getElementById("animationArea");
+    let result = document.getElementById("result");
+    area.innerHTML = "";
+    result.innerHTML = "";
+
+    if (text.length === 0) {
+        alert("Please enter some text!");
+        return;
+    }
+
+    let a = 63689;
+    let b = 378551;
+    let hash = 0;
+
+    for (let i = 0; i < text.length; i++) {
+        let ch = text[i];
+        let charCode = ch.charCodeAt(0);
+
+        // Show character box animation
+        let box = document.createElement("div");
+        box.className = "charBox";
+        box.innerHTML = `Char: <b>${ch}</b> (ASCII: ${charCode})`;
+        area.appendChild(box);
+
+        hash = hash * a + charCode;
+        a *= b;
+
+        await sleep(700);
+    }
+
+    result.innerHTML = "Final RSHash Value: <span style='color:#cc0000'>" + hash + "</span>";
+}
+</script>
+
+</body>
+</html>
