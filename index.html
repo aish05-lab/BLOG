@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Animated Blog – RSHash Function</title>
+    <style>
+      /* Background Gradient */
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: linear-gradient(135deg, #e0f7ff, #f9e7ff);
+        padding: 20px;
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      /* Main Title */
+      h1 {
+        color: #002244;
+        text-align: center;
+        font-size: 42px;
+        animation: fadeSlide 1.2s ease forwards;
+        opacity: 0;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Heading styling */
+      h2 {
+        color: #004b8d;
+        margin-top: 25px;
+        animation: fadeSlide 1.3s ease forwards;
+        opacity: 0;
+        border-left: 5px solid #004b8d;
+        padding-left: 10px;
+      }
+
+      p,
+      ul,
+      pre {
+        animation: fadeSlide 1.5s ease forwards;
+        opacity: 0;
+        color: #00334d;
+      }
+
+      pre {
+        background: #ffffffcc;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        color: #003366;
+        font-size: 15px;
+      }
+
+      /* Fade animation */
+      @keyframes fadeSlide {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Animation box styling */
+      #animationBox {
+        margin-top: 30px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.7);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        border-radius: 15px;
+        font-size: 18px;
+        backdrop-filter: blur(10px);
+      }
+
+      #result {
+        font-weight: bold;
+        color: #c4002f;
+      }
+
+      /* Character animation cubes */
+      .charBox {
+        display: inline-block;
+        padding: 10px 14px;
+        margin: 5px;
+        background: #66ccff;
+        color: #00334d;
+        border-radius: 8px;
+        font-weight: bold;
+        box-shadow: 0px 0px 8px rgba(0, 80, 140, 0.4);
+        animation: pop 0.4s ease;
+      }
+
+      @keyframes pop {
+        0% {
+          transform: scale(0.3);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      /* Button styling */
+      button {
+        margin-top: 12px;
+        padding: 10px 22px;
+        background: linear-gradient(135deg, #003366, #0055aa);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s ease;
+        font-size: 16px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      button:hover {
+        transform: scale(1.05);
+        background: linear-gradient(135deg, #004080, #0077cc);
+      }
+
+      /* Input styling */
+      input {
+        border: 2px solid #0077cc;
+        border-radius: 8px;
+        padding: 8px;
+        font-size: 16px;
+        background: #ffffffcc;
+      }
+
+      /* Explanation blocks */
+      .infoBox {
+        background: #e8f5ff;
+        padding: 10px;
+        border-radius: 8px;
+        color: #00334d;
+      }
+
+      ul {
+        list-style-type: disc;
+        margin-left: 25px;
+        color: #00334d;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Study of Hash Function - RSHash</h1>
+
+    <h2>What is RSHash?</h2>
+    <p>
+      RSHash is a simple and fast hashing function developed by Robert Sedgwick.
+      It uses two magic numbers (<b>63689</b> and <b>378551</b>) to generate a
+      unique integer for any string.
+    </p>
+
+    <h2>How RSHash Works</h2>
+    <p>The procedure is:</p>
+    <ul>
+      <li>Start hash = 0</li>
+      <li>For each character → hash = hash * a + ASCII value</li>
+      <li>After each character → a = a * b</li>
+    </ul>
+
+    <h2>Python Code</h2>
+    <pre>
+def RSHash(string):
+    a = 63689
+    b = 378551
+    hash_value = 0
+    
+    for ch in string:
+        hash_value = hash_value * a + ord(ch)
+        a = a * b
+        
+    return hash_value
+</pre
+    >
+
+    <h2>RSHash Animation</h2>
+    <div id="animationBox">
+      <p>Enter text to see how RSHash processes each character:</p>
+      <input
+        type="text"
+        id="inputString"
+        placeholder="Type something..."
+        style="width: 70%"
+      />
+      <button onclick="startAnimation()">Animate RSHash</button>
+
+      <div id="animationArea" style="margin-top: 20px"></div>
+      <p id="result"></p>
+    </div>
+
+    <script>
+      function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+
+      async function startAnimation() {
+        let text = document.getElementById("inputString").value;
+        let area = document.getElementById("animationArea");
+        let result = document.getElementById("result");
+        area.innerHTML = "";
+        result.innerHTML = "";
+
+        if (text.length === 0) {
+          alert("Please enter some text!");
+          return;
+        }
+
+        let a = 63689;
+        let b = 378551;
+        let hash = 0;
+
+        let explanation = [];
+
+        for (let i = 0; i < text.length; i++) {
+          let ch = text[i];
+          let charCode = ch.charCodeAt(0);
+
+          let box = document.createElement("div");
+          box.className = "charBox";
+          box.innerHTML = `Char: <b>${ch}</b> (ASCII: ${charCode})`;
+          area.appendChild(box);
+
+          explanation.push(
+            `Step ${
+              i + 1
+            }: '${ch}' → ASCII ${charCode}, New hash = (previous_hash × ${a}) + ${charCode}`
+          );
+
+          hash = hash * a + charCode;
+          a *= b;
+
+          await sleep(600);
+        }
+
+        result.innerHTML = `
+        <h3 style="color:#003366; margin-top:20px;">Final RSHash Value:</h3>
+        <span style='color:#cc0000; font-size:24px;'>${hash}</span><br><br>
+
+        <h3 style="color:#003366;">Explanation of Process</h3>
+        <div class="infoBox">
+            The text <b>"${text}"</b> contains <b>${
+          text.length
+        }</b> characters.  
+            Each character is converted to ASCII and processed using RSHash.
+        </div>
+
+        <h4 style="color:#003366;">Character Processing Steps:</h4>
+        <ul class="infoList">
+            ${explanation.map((line) => `<li>${line}</li>`).join("")}
+        </ul>
+
+        <div class="infoBox" style="margin-top:10px;">
+            RSHash rapidly grows the multiplier each step  
+            (<b>63689, 63689×378551, ...</b>)  
+            ensuring uniqueness and reducing hash collisions.
+        </div>
+    `;
+      }
+    </script>
+  </body>
+</html>
